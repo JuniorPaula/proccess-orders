@@ -10,3 +10,8 @@ func TestGivenAnEmptyID_WhenCreateANewOrder_ThenShouldReceiveAnError(t *testing.
 	order := Order{}
 	assert.Error(t, order.IsValid(), "invalid id")
 }
+
+func TestGivenAnEmptyPrice_WhenCreateANewOrder_ThenShouldReceiveAnError(t *testing.T) {
+	order := Order{ID: "123"}
+	assert.Error(t, order.IsValid(), "invalid price")
+}

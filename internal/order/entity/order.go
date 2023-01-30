@@ -21,5 +21,10 @@ func (o *Order) IsValid() error {
 	if o.ID == "" {
 		return errors.New("invalid id")
 	}
+
+	if o.Price <= 0 {
+		return errors.New("invalid price")
+	}
+
 	return nil
 }
