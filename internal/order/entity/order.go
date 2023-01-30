@@ -26,5 +26,9 @@ func (o *Order) IsValid() error {
 		return errors.New("invalid price")
 	}
 
+	if o.Tax <= 0 {
+		return errors.New("invalid tax")
+	}
+
 	return nil
 }
