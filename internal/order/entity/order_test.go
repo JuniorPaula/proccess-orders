@@ -40,3 +40,10 @@ func TestGivenAValidParams_WhenCallNewOrderFunc_ThenShouldReceiveCreateOrderWith
 	assert.Equal(t, 100.0, order.Price)
 	assert.Equal(t, 2.0, order.Tax)
 }
+
+func TestGivenAPriceAndTax_WhenCallCauculatePrice_ThenShouldSetFinalPrice(t *testing.T) {
+	order, err := NewOrder("123", 100.0, 2.0)
+	assert.Nil(t, err)
+	assert.Nil(t, order.CalculateFinalPrice())
+	assert.Equal(t, 102.0, order.FinalPrice)
+}
