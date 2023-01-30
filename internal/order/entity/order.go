@@ -10,11 +10,17 @@ type Order struct {
 }
 
 func NewOrder(id string, price float64, tax float64) (*Order, error) {
-	return &Order{
+	order := &Order{
 		ID:    id,
 		Price: price,
 		Tax:   tax,
-	}, nil
+	}
+	err := order.IsValid()
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
 }
 
 func (o *Order) IsValid() error {
