@@ -8,6 +8,7 @@ import (
 	"gorabbitmq/internal/order/usecases"
 	"gorabbitmq/pkg/msql"
 	"gorabbitmq/pkg/rabbitmq"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -48,5 +49,6 @@ func main() {
 		msg.Ack(false)
 
 		fmt.Println(outputDTO)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
