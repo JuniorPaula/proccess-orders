@@ -10,6 +10,7 @@ import (
 
 var (
 	ConnectStringDatabase = ""
+	RabbitmqConnectString = ""
 )
 
 func InitVariables() {
@@ -24,4 +25,6 @@ func InitVariables() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_DATABASE"),
 	)
+
+	RabbitmqConnectString = os.Getenv("RABBITMQ_CONNECT_STRING")
 }

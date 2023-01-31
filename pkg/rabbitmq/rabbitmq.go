@@ -1,11 +1,13 @@
 package rabbitmq
 
 import (
+	"gorabbitmq/internal/config"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 func OpenChannel() (*amqp.Channel, error) {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672")
+	conn, err := amqp.Dial(config.RabbitmqConnectString)
 	if err != nil {
 		return nil, err
 	}

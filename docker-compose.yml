@@ -13,3 +13,13 @@ services:
       - RABBITMQ_USER=guest
       - RABBITMQ_PASS=guest
       - RABBITMQ_VHOST=/
+
+  mysqlsrv:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "admin"
+      MYSQL_DATABASE: "orders"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/data/db
