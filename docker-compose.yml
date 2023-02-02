@@ -16,13 +16,14 @@ services:
 
   mysqlsrv:
     image: mysql:5.7
+    container_name: mysql-orders
     environment:
       MYSQL_ROOT_PASSWORD: "admin"
       MYSQL_DATABASE: "orders"
     ports:
       - "3306:3306"
     volumes:
-      - ./db:/data/db
+      - ./mysql-data:/var/lib/mysql
 
   prometheus:
     image: prom/prometheus
