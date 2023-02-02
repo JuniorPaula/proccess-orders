@@ -8,6 +8,7 @@ import (
 	"gorabbitmq/internal/order/usecases"
 	"gorabbitmq/pkg/msql"
 	"gorabbitmq/pkg/rabbitmq"
+	"net/http"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -35,7 +36,28 @@ func main() {
 	out := make(chan amqp.Delivery)
 	go rabbitmq.Consume(ch, out)
 
-	for msg := range out {
+	qtdWorkers := 5
+
+	for i := 1; i <= qtdWorkers; i++ {
+		go worker(out, &uc, i)
+	}
+
+	http.HandleFunc("/total", func(w http.ResponseWriter, r *http.Request) {
+		getTotalUC := usecases.GetTotalUseCase{OrderRepository: repository}
+		total, err := getTotalUC.Execute()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		json.NewEncoder(w).Encode(total)
+	})
+
+	http.ListenAndServe(":3032", nil)
+
+}
+
+func worker(deliveryMessage <-chan amqp.Delivery, uc *usecases.CalculateFinalPriceUsecase, workerID int) {
+	for msg := range deliveryMessage {
 		var inputDTO usecases.OrderInputDTO
 		err := json.Unmarshal(msg.Body, &inputDTO)
 		if err != nil {
@@ -48,7 +70,7 @@ func main() {
 		}
 		msg.Ack(false)
 
-		fmt.Println(outputDTO)
-		time.Sleep(500 * time.Millisecond)
+		fmt.Printf("Worker %d has processed order %s\n", workerID, outputDTO.ID)
+		time.Sleep(1 * time.Second)
 	}
 }
